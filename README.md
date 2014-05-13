@@ -9,7 +9,7 @@ The Java Fiscal Device API is a medium-level API to communicate with fiscal devi
 Where do I start?
 -----------------
 
-You can try the API documentation. These interfaces will probably be the most interesting to you:
+You can try the [API documentation](http://lanchon.github.io/java-fiscal-device-api/api/index.html). These interfaces will probably be the most interesting to you:
 
     com.taliter.fiscal.device.FiscalDeviceSource
     com.taliter.fiscal.device.FiscalDevice
@@ -25,7 +25,7 @@ Additionally, `com.taliter.fiscal.device.hasar.HasarConstants` defines some usef
 
 You may want to take a look into package `com.taliter.fiscal.util`. It contains tools that provide protocol and port speed autodetection, as well as event and communication loggers that can assist you during development.
 
-There is also a very basic sample available.
+There is also a [very basic sample](https://github.com/Lanchon/java-fiscal-device-api/blob/master/samples/Sample.java) available.
 
 Update
 ------
@@ -35,6 +35,11 @@ This software depends on an implementation of its own `FiscalPort` interface to 
 Please contribute your drivers to the project. They will be accepted if they are tested to work and implement `FiscalPort` and `FiscalPortSource` classes in their own package, in the style of package `com.taliter.fiscal.port.serial`. (Modifications to the current driver will not be accepted unless they are bug fixes.)
 
 I no longer have access to fiscal devices and thus I cannot test. For this reason I cannot implement `FiscalPort`s that wrap these new serial port drivers. However this API is still being maintained: no bugfix releases were made in 10 years because, although it has many users, no bugs were ever reported against it. Debugging would be harder now without test devices but I will still try my best to fix the code if a bug is reported.
+
+Download
+--------
+
+Releases are available [here](https://github.com/Lanchon/java-fiscal-device-api/tree/master/releases).
 
 And what else?
 --------------
