@@ -9,7 +9,7 @@ The Java Fiscal Device API is a medium-level API to communicate with fiscal devi
 Where do I start?
 -----------------
 
-You can try the [API documentation](http://lanchon.github.io/java-fiscal-device-api/api/index.html). These interfaces will probably be the most interesting to you:
+You can try the [API documentation](http://lanchon.github.io/Java-Fiscal-Device-API/api/index.html). These interfaces will probably be the most interesting to you:
 
     com.taliter.fiscal.device.FiscalDeviceSource
     com.taliter.fiscal.device.FiscalDevice
@@ -25,7 +25,7 @@ Additionally, `com.taliter.fiscal.device.hasar.HasarConstants` defines some usef
 
 You may want to take a look into package `com.taliter.fiscal.util`. It contains tools that provide protocol and port speed autodetection, as well as event and communication loggers that can assist you during development.
 
-There is also a [very basic sample](https://github.com/Lanchon/java-fiscal-device-api/blob/master/samples/Sample.java) available.
+There is also a [very basic sample](https://github.com/Lanchon/Java-Fiscal-Device-API/blob/master/samples/Sample.java) available.
 
 Update
 ------
@@ -39,7 +39,7 @@ I no longer have access to fiscal devices and thus I cannot test. For this reaso
 Download
 --------
 
-Releases are available [here](https://github.com/Lanchon/java-fiscal-device-api/tree/master/releases).
+Releases are available [here](https://github.com/Lanchon/Java-Fiscal-Device-API/releases).
 
 And what else?
 --------------
