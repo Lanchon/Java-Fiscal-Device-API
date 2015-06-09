@@ -18,6 +18,13 @@ public interface FiscalPort
 	/** Get the receive timeout. The port must be open. -1 means no timeout (default after open()). */
 	public int getTimeout() throws Exception;
 
+	/** Set the baud rate. The port may be open or closed.
+	@throws UnsupportedOperationException if baud rates are not applicable to this type of port. */
+	public void setBaudRate(int baudRate) throws Exception;
+	/** Get the baud rate. The port may be open or closed.
+	@throws UnsupportedOperationException if baud rates are not applicable to this type of port. */
+	public int getBaudRate() throws Exception;
+
 	/** Get the input stream. The port must be open. */
 	public InputStream getInputStream() throws IOException;
 	/** Get the output stream. The port must be open. */

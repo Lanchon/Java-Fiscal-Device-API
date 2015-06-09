@@ -1,12 +1,10 @@
 package com.taliter.fiscal.util;
 
 import java.io.*;
-import javax.comm.*;
 
 import com.taliter.fiscal.device.*;
 import com.taliter.fiscal.device.hasar.*;
 import com.taliter.fiscal.port.*;
-import com.taliter.fiscal.port.serial.*;
 
 /** A tool to change the baud rate of a Hasar fiscal device. */
 public final class HasarBaudRateChanger
@@ -20,22 +18,15 @@ public final class HasarBaudRateChanger
 	private static final int CMD_SET_BAUD_RATE = 0xA0;
 
 	/** Change the baud rate of a Hasar fiscal device. The device must be open. */
-	public static void changeBaudRate(FiscalDevice device, int baudRate) throws UnsupportedCommOperationException, IOException
+	public static void changeBaudRate(FiscalDevice device, int baudRate) throws Exception
 	{
 		changeBaudRate((HasarFiscalDevice) device, baudRate);
 	}
 
 	/** Change the baud rate of a Hasar fiscal device. The device must be open. */
-	public static void changeBaudRate(HasarFiscalDevice device, int baudRate) throws UnsupportedCommOperationException, IOException
+	public static void changeBaudRate(HasarFiscalDevice device, int baudRate) throws Exception
 	{
 		FiscalPort port = device.getFiscalPort();
-		while (port instanceof LoggerFiscalPort) port = ((LoggerFiscalPort) port).getFiscalPort();
-		changeBaudRate(device, (SerialFiscalPort) port, baudRate);
-	}
-
-	/** Change the baud rate of a Hasar fiscal device. The device must be open. */
-	public static void changeBaudRate(HasarFiscalDevice device, SerialFiscalPort port, int baudRate) throws UnsupportedCommOperationException, IOException
-	{
 		int br = port.getBaudRate();
 		if (br == baudRate)
 		{

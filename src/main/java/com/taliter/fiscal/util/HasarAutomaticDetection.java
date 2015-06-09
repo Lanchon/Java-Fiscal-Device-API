@@ -1,12 +1,10 @@
 package com.taliter.fiscal.util;
 
 import java.io.*;
-import javax.comm.*;
 
 import com.taliter.fiscal.device.*;
 import com.taliter.fiscal.device.hasar.*;
 import com.taliter.fiscal.port.*;
-import com.taliter.fiscal.port.serial.*;
 
 /** A tool to detect the baud rate and extended protocol support of a Hasar fiscal device. */
 public final class HasarAutomaticDetection
@@ -26,13 +24,6 @@ public final class HasarAutomaticDetection
 	public static void openDeviceDetectingBaudRate(HasarFiscalDevice device) throws Exception
 	{
 		FiscalPort port = device.getFiscalPort();
-		while (port instanceof LoggerFiscalPort) port = ((LoggerFiscalPort) port).getFiscalPort();
-		openDeviceDetectingBaudRate(device, (SerialFiscalPort) port);
-	}
-
-	/** Open a Hasar fiscal device detecting the baud rate. The device must be closed. */
-	public static void openDeviceDetectingBaudRate(HasarFiscalDevice device, SerialFiscalPort port) throws Exception
-	{
 		boolean xp = device.getExtendedProtocol();
 		int mt = device.getMaxTries();
 		try
@@ -41,8 +32,7 @@ public final class HasarAutomaticDetection
 			device.setMaxTries(MAX_TRIES);
 			Exception e1 = null;
 			try { device.open(); }
-			catch (UnsupportedCommOperationException e) { e1 = e; }
-			catch (FiscalDeviceTimeoutException e) { e1 = e; }
+			catch (Exception e) { e1 = e; }
 			if (e1 == null) return;
 			int br = port.getBaudRate();
 			boolean success = false;
@@ -57,8 +47,7 @@ public final class HasarAutomaticDetection
 						port.setBaudRate(BAUD_RATES[i]);
 						device.open();
 					}
-					catch (UnsupportedCommOperationException e) { e2 = e; }
-					catch (FiscalDeviceTimeoutException e) { e2 = e; }
+					catch (Exception e) { e2 = e; }
 					if (e2 == null)
 					{
 						success = true;

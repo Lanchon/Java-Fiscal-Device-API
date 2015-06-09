@@ -117,14 +117,14 @@ public class SerialFiscalPort implements FiscalPort
 	/** Get the underlying serial port or null if the port is not open. */
 	public SerialPort getSerialPort() { return port; }
 
-	/** Set the baud rate. The port may be open. */
+	/** Set the baud rate. The port may be open or closed. */
 	public void setBaudRate(int baudRate) throws UnsupportedCommOperationException
 	{
 		if (port != null) port.setSerialPortParams(baudRate, port.getDataBits(), port.getStopBits(), port.getParity());
 		this.baudRate = baudRate;
 	}
 
-	/** Get the baud rate. */
+	/** Get the baud rate. The port may be open or closed. */
 	public int getBaudRate() { return baudRate; }
 
 	public void setTimeout(int ms) throws UnsupportedCommOperationException

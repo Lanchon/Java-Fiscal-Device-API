@@ -4,7 +4,7 @@ import java.io.*;
 
 import com.taliter.fiscal.port.*;
 
-/** A wrapper FiscalPort that logs incomming and outgoing data. */
+/** A wrapper FiscalPort that logs incoming and outgoing data. */
 public class LoggerFiscalPort implements FiscalPort
 {
 	private final FiscalPort port;
@@ -53,6 +53,17 @@ public class LoggerFiscalPort implements FiscalPort
 	public int getTimeout() throws Exception
 	{
 		return port.getTimeout();
+	}
+
+	public void setBaudRate(int baudRate) throws Exception
+	{
+		log.println("port: setBaudRate: " + baudRate + " baud");
+		port.setBaudRate(baudRate);
+	}
+
+	public int getBaudRate() throws Exception
+	{
+		return port.getBaudRate();
 	}
 
 	public InputStream getInputStream() throws IOException
