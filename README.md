@@ -25,7 +25,7 @@ Additionally, `com.taliter.fiscal.device.hasar.HasarConstants` defines some usef
 
 You may want to take a look into package `com.taliter.fiscal.util`. It contains tools that provide protocol and port speed autodetection, as well as event and communication loggers that can assist you during development.
 
-There is also a [very basic sample](https://github.com/Lanchon/Java-Fiscal-Device-API/blob/master/samples/Sample.java) available.
+There is also a [very basic sample](https://github.com/Lanchon/Java-Fiscal-Device-API/blob/master/samples/src/main/java/Sample.java) available.
 
 Update
 ------
