@@ -41,9 +41,7 @@ public class HasarFiscalDeviceSource implements FiscalDeviceSource
 		return ds;
 	}
 
-	/** Set the FiscalPort factory. */
 	public void setPortSource(FiscalPortSource portSource) { this.portSource = portSource; }
-	/** Get the FiscalPort factory. */
 	public FiscalPortSource getPortSource() { return portSource; }
 
 	/** Set the protocol timeout. */

@@ -2,7 +2,7 @@ import java.util.*;
 
 import com.taliter.fiscal.device.*;
 import com.taliter.fiscal.device.hasar.*;
-import com.taliter.fiscal.port.serial.*;
+import com.taliter.fiscal.port.rxtx.*;
 import com.taliter.fiscal.util.*;
 
 /** A simple example that obtains the date and time from a Hasar fiscal printer in COM1. */
@@ -13,7 +13,11 @@ public class Sample implements HasarConstants
 		// Source or factory objects encapsulate all configuration data and are serializable.
 		// Normally they would be obtained from some persistent representation such as XML,
 		// but here we will just instantiate what we need for simplicity.
-		FiscalDeviceSource deviceSource = new HasarFiscalDeviceSource(new SerialFiscalPortSource("COM1"));
+		FiscalDeviceSource deviceSource = new HasarFiscalDeviceSource(new RXTXFiscalPortSource("COM1"));
+
+		// Optionally cause the underlying FiscalPort implementation to be wrapped with a comm logger.
+		boolean logComm = false;
+		if (logComm) deviceSource.setPortSource(new LoggerFiscalPortSource(deviceSource.getPortSource(), System.out));
 
 		// Obtain an interface to the device.
 		FiscalDevice device = deviceSource.getFiscalDevice();
