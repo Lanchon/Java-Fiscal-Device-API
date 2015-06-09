@@ -15,18 +15,18 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library" scope="PROVIDED">
-      <library name="Gradle: rxtx-2.1-7-bins-r2">
+      <library name="Gradle: javax-comm-2.0">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/apis/rxtx-2.1-7-bins-r2.jar!/" />
+          <root url="jar://$MODULE_DIR$/apis/javax-comm-2.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="PROVIDED">
-      <library name="Gradle: javax-comm-2.0">
+      <library name="Gradle: rxtx-2.1-7-bins-r2">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/apis/javax-comm-2.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/apis/rxtx-2.1-7-bins-r2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

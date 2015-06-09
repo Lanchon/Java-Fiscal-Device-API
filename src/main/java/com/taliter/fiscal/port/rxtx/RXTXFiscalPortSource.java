@@ -5,14 +5,14 @@ import gnu.io.*;
 import com.taliter.fiscal.port.*;
 
 /**
-A SerialFiscalPort factory.
+An RXTXFiscalPort factory.
 
-<p>Most of the parameters of this class are defined in the <code>javax.comm</code> package.
+<p>Most of the parameters of this class are defined in the <code>gnu.io</code> package.
 
 <p>Defaults:
 
 <p><code>portName = null;<br>
-appName = "SerialFiscalPort";<br>
+appName = "RXTXFiscalPort";<br>
 openTimeout = 2000;	// In milliseconds.<br>
 baudRate = 9600;<br>
 dataBits = SerialPort.DATABITS_8;<br>
@@ -20,12 +20,12 @@ stopBits = SerialPort.STOPBITS_1;<br>
 parity = SerialPort.PARITY_NONE;<br>
 flowControl = SerialPort.FLOWCONTROL_NONE;</code>
 
-<p>The set of available serial port names can be obtained via <code>SerialFiscalPort.getPortNames()</code>.
+<p>The set of available serial port names can be obtained via <code>RXTXFiscalPort.getPortNames()</code>.
 */
 public class RXTXFiscalPortSource implements FiscalPortSource, Cloneable
 {
 	private String portName;
-	private String appName = "SerialFiscalPort";
+	private String appName = "RXTXFiscalPort";
 	private int openTimeout = 2000;	// In milliseconds.
 	private int baudRate = 9600;
 	private int dataBits = SerialPort.DATABITS_8;
@@ -82,11 +82,11 @@ public class RXTXFiscalPortSource implements FiscalPortSource, Cloneable
 	/** Get the type of flow control if any. */
 	public int getFlowControl() { return flowControl; }
 
-	/** Create a SerialFiscalPort object. */
-	public FiscalPort getFiscalPort() throws NoSuchPortException, UnsupportedCommOperationException { return getSerialFiscalPort(); }
+	/** Create a RXTXFiscalPort object. */
+	public FiscalPort getFiscalPort() throws NoSuchPortException, UnsupportedCommOperationException { return getRXTXFiscalPort(); }
 
-	/** Create a SerialFiscalPort object. */
-	public RXTXFiscalPort getSerialFiscalPort() throws NoSuchPortException, UnsupportedCommOperationException
+	/** Create a RXTXFiscalPort object. */
+	public RXTXFiscalPort getRXTXFiscalPort() throws NoSuchPortException, UnsupportedCommOperationException
 	{
 		return new RXTXFiscalPort(portName, appName, openTimeout, baudRate, dataBits, stopBits, parity, flowControl);
 	}

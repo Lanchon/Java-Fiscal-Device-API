@@ -7,8 +7,8 @@ import gnu.io.*;
 
 import com.taliter.fiscal.port.*;
 
-/** A FiscalPort implementation that uses <a href="http://rxtx.qbang.org/">the RXTX library</a>
-to communicate over serial ports. */
+/** A FiscalPort implementation that uses <a href="http://rxtx.qbang.org/">RXTX</a> or
+<a href="https://github.com/NeuronRobotics/nrjavaserial">nrjavaserial</a> to communicate over serial ports. */
 public class RXTXFiscalPort implements FiscalPort
 {
 	// TODO: Handle these events and throw exceptions in read(): FramingError, OverrunError, ParityError
