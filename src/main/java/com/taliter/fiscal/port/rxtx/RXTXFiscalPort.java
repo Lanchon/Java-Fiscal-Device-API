@@ -1,13 +1,15 @@
-package com.taliter.fiscal.port.serial;
+package com.taliter.fiscal.port.rxtx;
 
 import java.io.*;
 import java.util.*;
-import javax.comm.*;
+
+import gnu.io.*;
 
 import com.taliter.fiscal.port.*;
 
-/** A FiscalPort implementation that uses the <code>javax.comm</code> API to communicate over serial ports. */
-public class SerialFiscalPort implements FiscalPort
+/** A FiscalPort implementation that uses <a href="http://rxtx.qbang.org/">the RXTX library</a>
+to communicate over serial ports. */
+public class RXTXFiscalPort implements FiscalPort
 {
 	// TODO: Handle these events and throw exceptions in read(): FramingError, OverrunError, ParityError
  	// TODO: Use the OutputEmpty event to wait in flushAndWait() (but see note below).
@@ -39,7 +41,7 @@ public class SerialFiscalPort implements FiscalPort
 	private InputStream in;
 	private OutputStream out;
 
-	public SerialFiscalPort(String portName, String appName, int openTimeout, int baudRate, int dataBits, int stopBits, int parity, int flowControl) throws NoSuchPortException, UnsupportedCommOperationException
+	public RXTXFiscalPort(String portName, String appName, int openTimeout, int baudRate, int dataBits, int stopBits, int parity, int flowControl) throws NoSuchPortException, UnsupportedCommOperationException
 	{
 		portID = CommPortIdentifier.getPortIdentifier(portName);
 		if (portID.getPortType() != CommPortIdentifier.PORT_SERIAL) throw new UnsupportedCommOperationException("Serial port expected");
@@ -154,5 +156,6 @@ public class SerialFiscalPort implements FiscalPort
 	// In addition, it has a bug that generates spurious OutputEmpty
 	// events making it unreliable to use these events. (However in this
 	// case it wouldn't cause problems.)
+	// NOTE: Behavior of RXTX is unknown and untested.
 	public void flushAndWait() throws IOException { out.flush(); }
 }
