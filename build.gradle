@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id "nebula.provided-base" version "2.2.2"
+}
+
+group 'com.github.lanchon.fiscal-device'
+
+version '1.1.0-SNAPSHOT'
+
+sourceCompatibility = 1.5
+
+dependencies {
+    provided fileTree(dir: 'apis', include: ['*.jar'])
+}
+
+javadoc {
+    options.overview = 'src/main/java/overview.html'
+    options.docTitle = "Java Fiscal Device API - $version"
+    options.windowTitle = options.docTitle
+}
+
+tasks.withType(Jar) {
+    manifest {
+        attributes(
+                'Implementation-Title': 'Java Fiscal Device API',
+                'Implementation-Version': version
+        )
+    }
+}
+
+task sourcesJar(type: Jar) {
+    dependsOn classes
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar) {
+    dependsOn javadoc
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
