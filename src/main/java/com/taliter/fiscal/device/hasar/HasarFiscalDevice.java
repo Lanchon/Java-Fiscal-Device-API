@@ -49,12 +49,14 @@ public class HasarFiscalDevice extends BasicFiscalDevice
 		finally { eventHandler = h; }
 	}
 
+        public FiscalPacket createFiscalPacket() { return new HasarFiscalPacket(getEncoding(), getBaseRolloverYear()); }
 	/** True to handle STATPRN responses via the FiscalDeviceEventHandler.onExtendedStatus() event.
 	False to return STATPRN responses from the FiscalDevice.execute() methods. */
 	public void setHandleExtendedProtocol(boolean handleExtendedProtocol) { this.handleExtendedProtocol = handleExtendedProtocol; }
 	/** True to handle STATPRN responses via the FiscalDeviceEventHandler.onExtendedStatus() event.
 	False to return STATPRN responses from the FiscalDevice.execute() methods. */
 	public boolean getHandleExtendedProtocol() { return handleExtendedProtocol; }
+
 
 	public void execute(FiscalPacket request, FiscalPacket response) throws IOException
 	{

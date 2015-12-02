@@ -1,65 +1,42 @@
-/*
- * Copyright (C) 2015 EDA Ltd.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
-
-/**
- *
- * @author nikolabintev@edabg.com
- */
 package com.taliter.fiscal.device.icl;
 
+import static com.taliter.fiscal.device.FiscalPacket.STYLE_NORMAL;
+import com.taliter.fiscal.device.hasar.AbstractFiscalPacket;
 import com.taliter.fiscal.util.ByteFormatter;
 import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * Implements the AbstractFiscalPacket interface.
- * Provides the properties and methods needed for the communication 
- * with fiscal devices which work with ICL protocol.
+ * This implementation describes the packet which is used by ICL fiscal device for communication.
+ * ICLFiscalPacket is based on list of fields each of which is represented by byte array.
+ * In the first field (index 0) is stored the command code, in the second field (index 1)
+ * is stored a byte array containing the data received from the fiscal device or sent to the fiscal device. 
+ * In the third field (index 2) is stored a byte array containing the fiscal device status.
+ * @author nikolabintev@edabg.com
  */
 public class ICLFiscalPacket extends AbstractFiscalPacket {
-
-    /**
-     * The encoding of fiscal packet as a string.
-     */
-    private final String encoding;
-
-    /**
-     * Crates an instance of the ICLFiscalPacket class.
-     * @param encoding The encoding of the fiscal packet.
+    
+    /**Fiscal packet encoding*/
+    private String encoding;
+    
+    /**Creates fiscal packet object
+     * @param encoding fiscal packet encoding
      */
     public ICLFiscalPacket(String encoding) {
         this.encoding = encoding;
     }
-
+    
     /**
-     * Get fiscal packet encoding.
-     * @return The encoding as a string.
+     * Get the Fiscal packet's encoding
+     * @return The encoding as a string
      */
     public String getEncoding() {
-        return encoding;
+        return this.encoding;
     }
-
+    
     @Override
     public String toString() {
         StringBuffer b = new StringBuffer();
@@ -95,14 +72,12 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
         
         return data;
     }
-    
 
     /**
      * Set a string value at a specified field.
      * @param field The field index.
      * @param value The string value.
      */
-    @Override
     public void setString(int field, String value) {
         byte[] f;
         try {
@@ -112,14 +87,13 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
         }
         set(field, f);
     }
-    
+
     /**
      * Set a string value at a specified field.
      * @param field The field index.
      * @param value The string value.
      * @param style The sting style.
      */
-    @Override
     public void setString(int field, String value, int style) {
         byte[] f;
         try {
@@ -145,7 +119,6 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * @param field The field value
      * @return The value as a string.
      */
-    @Override
     public String getString(int field) {
         byte[] f = get(field);
         try {
@@ -160,7 +133,6 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * @param field The field index.
      * @return The string style as an Integer.
      */
-    @Override
     public int getStringStyle(int field) {
         byte[] f = get(field);
         return f.length == 0 || (f[0] & 0xF0) != 0xF0 ? STYLE_NORMAL : f[0] & 0xF;
@@ -176,8 +148,6 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * @param minute - The value of the minutes in the new time. (0 to 59) 
      * @param second - The value of the seconds in the new time. (0 to 59) 
      */
-    // Date And Time Fields
-    @Override
     public void setDateAndTime(int dateField, int year, int month, int day, int hour, int minute, int second) {
         
         if (month < 1 || month > 12 || day < 1 || day > 31) {
@@ -212,39 +182,41 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
         this.setString(dateField, dateTime);
     }
 
+
+    /**
+     * Get fiscal device's date.
+     * @param field The field index.
+     * @return 
+     */
+    @Override
+    public Date getDate(int field) {
+        return getDateAndTime(field);
+    }
+    
+    
     /**
      * Get the fiscal device's date and time.
      * @param field The field index 
      * @return A Calendar object with the fiscal device's date and time values
      */
-    @Override
-    public Calendar getDateAndTime(int field) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.clear();
-        
+    public Date getDateAndTime(int field) {
         String v = getString(field);
-
-        if (v.length() != 17) {
+        
+        if(v.length() != 17) {
             throw new NumberFormatException();
         }
         
-        int year = Integer.parseInt(v.substring(6, 8));
-        int month = Integer.parseInt(v.substring(3, 5)) - 1;
-        int day = Integer.parseInt(v.substring(0, 2));
-        int hour = Integer.parseInt(v.substring(9, 11));
-        int minute = Integer.parseInt(v.substring(12, 14));
-        int second = Integer.parseInt(v.substring(15, 17));
-
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, second);
-
-        return calendar;
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yy hh:mm:ss"); 
+        Date date = null;
+        try {
+            date = df.parse(v);
+        } catch (ParseException ex) {
+            throw new NumberFormatException();
+        }
+        
+        return date;
     }
-    
+
     /**
      * Set the fiscal device's date
      * @param field The field index
@@ -252,7 +224,6 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * @param month The month (1 to 12)
      * @param day  The day of month (1 to 31)
      */
-    @Override
     public void setDate(int field, int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         
@@ -264,36 +235,10 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
     }
 
     /**
-     * Get the fiscal device's date.
-     * @param field The field index.
-     * @return The fiscal device date as a Date object.
-     */
-    @Override
-    public Date getDate(int field) {
-        Date date = null;
-        
-        String v = getString(field);
-        DateFormat df = new SimpleDateFormat("dd-MM-yy");
-
-        if (v.length() != 17) {
-            throw new NumberFormatException();
-        }
-        
-        try {
-            date = df.parse(v.substring(0, 8));
-        } catch (ParseException ex) {
-            Logger.getLogger(ICLFiscalPacket.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return date;
-    }
-    
-    /**
-     * Get the year.
+     * Get the year from the fiscal device date.
      * @param field The field index.
      * @return The year.
      */
-    @Override
     public int getDateYear(int field) {
         String v = getString(field);
         
@@ -311,11 +256,10 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
     }
 
     /**
-     * Get the month of the year.
+     * Get the month of the year from the fiscal device date.
      * @param field The field index.
      * @return The month of the year.
      */
-    @Override
     public int getDateMonth(int field) {
         String v = getString(field);
         
@@ -331,13 +275,12 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
         
         return month;
     }
-    
+
     /**
-     * Get the day of the month. 
+     * Get the day of the month from the fiscal device date. 
      * @param field The field index.
      * @return The day of the month.
      */
-    @Override
     public int getDateDay(int field) {
         String v = getString(field);
         
@@ -360,7 +303,6 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * @param minute from 0 to 59
      * @param second from 0 to 59
      */
-    @Override
     public void setTime(int field, int hour, int minute, int second) {
         Calendar calendar = Calendar.getInstance();
 
@@ -377,7 +319,6 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * @param field The field index.
      * @return The hour part of the time.
      */
-    @Override
     public int getTimeHour(int field) {
         String v = getString(field);
         
@@ -399,7 +340,6 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * @param field The field index.
      * @return The minute part of the time.
      */
-    @Override
     public int getTimeMinute(int field) {
         String v = getString(field);
         
@@ -421,7 +361,6 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * @param field The field index.
      * @return The second part of the time.
      */
-    @Override
     public int getTimeSecond(int field) {
         String v = getString(field);
         
@@ -442,7 +381,6 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * Set the command code of the packet.
      * @param value The command code value.
      */
-    @Override
     public void setCommandCode(int value) {
         setByte(0, value);
     }
@@ -451,7 +389,6 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * Get the command code of the packet.
      * @return The command code.
      */
-    @Override
     public int getCommandCode() {
         return getByte(0);
     }
@@ -460,7 +397,6 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * Set fiscal status of this response packet.
      * @param value The value of the status.
      */
-    @Override
     public void setPrinterStatus(int value) {
         setHex16(2,value);
     }
@@ -469,16 +405,14 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * Get the fiscal device status.
      * @return The fiscal device status as a 16-bit number.
      */
-    @Override
     public int getPrinterStatus() {
         return getHex16(2);
     }
-    
+
     /**
      * Set fiscal status of this response packet.
      * @param value The value of the status.
      */
-    @Override
     public void setFiscalStatus(int value) {
         setHex16(2, value);
     }
@@ -487,16 +421,7 @@ public class ICLFiscalPacket extends AbstractFiscalPacket {
      * Get the fiscal device status.
      * @return The fiscal device status as a 16-bit number.
      */
-    @Override
     public int getFiscalStatus() {
         return getHex16(2);
-    }
-    
-    /**
-     * Get the fiscal device status.
-     * @return The fiscal device status as a byte array.
-     */
-    public byte[] getFPStatus() {
-        return get(2);
     }
 }
