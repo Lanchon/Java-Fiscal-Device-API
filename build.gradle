@@ -3,6 +3,8 @@ plugins {
     id "nebula.provided-base" version "2.2.2"
 }
 
+compileJava.options.encoding = 'UTF-8'
+
 group 'com.github.lanchon.fiscal-device'
 
 version '1.1.0'

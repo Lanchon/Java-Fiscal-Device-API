@@ -6,7 +6,7 @@ import com.taliter.fiscal.device.*;
 import com.taliter.fiscal.port.*;
 
 /** A basic FiscalDevice implementation that does not make assumptions about packet contents. */
-public class BasicFiscalDevice implements FiscalDevice
+public abstract class BasicFiscalDevice implements FiscalDevice
 {
 	private static final boolean ALWAYS_ACKNOWLEDGE = false;
 	private static final boolean REQUIRE_ACKNOWLEDGE = false;	// Must be false for Epson compatibility.
@@ -36,9 +36,9 @@ public class BasicFiscalDevice implements FiscalDevice
 	private int baseRolloverYear;
 	protected FiscalDeviceEventHandler eventHandler;
 
-	private InputStream in;
-	private OutputStream out;
-	private int serialNumber;
+	protected InputStream in;
+	protected OutputStream out;
+	protected int serialNumber;
 	private int receivedSerialNumber;
 	private int receivedChecksum;
 
@@ -138,7 +138,7 @@ public class BasicFiscalDevice implements FiscalDevice
 	public void setEventHandler(FiscalDeviceEventHandler eventHandler) { this.eventHandler = eventHandler; }
 	public FiscalDeviceEventHandler getEventHandler() { return eventHandler; }
 
-	public FiscalPacket createFiscalPacket() { return new HasarFiscalPacket(encoding, baseRolloverYear); }
+	public abstract FiscalPacket createFiscalPacket();
 
 	private int nextSerialNumber()
 	{
